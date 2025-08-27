@@ -1,0 +1,55 @@
+.lf-row {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: var(--lf-gap, 1rem);
+}
+
+.lf-row .wpcf7-form p {
+  margin: 0;
+}
+
+.lf-col {
+  grid-column: span 12 / span 12;
+}
+
+// Mixin for column span
+@mixin col-span($attr) {
+  @for $i from 1 through 12 {
+    &[data-#{$attr}="#{$i}"] {
+      grid-column: span #{$i} / span #{$i};
+    }
+  }
+}
+
+// Base column spans
+.lf-col {
+  @include col-span('col');
+}
+
+// Small breakpoint (≥640px)
+@media (min-width: 640px) {
+  .lf-col {
+    @include col-span('sm');
+  }
+}
+
+// Medium breakpoint (≥768px)
+@media (min-width: 768px) {
+  .lf-col {
+    @include col-span('md');
+  }
+}
+
+// Large breakpoint (≥1024px)
+@media (min-width: 1024px) {
+  .lf-col {
+    @include col-span('lg');
+  }
+}
+
+// Extra Large breakpoint (≥1280px)
+@media (min-width: 1280px) {
+  .lf-col {
+    @include col-span('xl');
+  }
+}

@@ -1,0 +1,26 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Clean minimalist components */
+@layer components {
+  .clean-card {
+    @apply bg-white border border-border rounded-lg hover:shadow-sm transition-shadow;
+  }
+  
+  .clean-badge {
+    @apply inline-flex items-center px-2 py-0.5 text-xs font-medium rounded;
+  }
+  
+  .badge-pro {
+    @apply clean-badge bg-primary text-white;
+  }
+  
+  .badge-planned {
+    @apply clean-badge bg-warning text-white;
+  }
+  
+  .addon-icon {
+    @apply w-12 h-12 bg-light rounded-lg flex items-center justify-center text-xl;
+  }
+}

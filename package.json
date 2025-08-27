@@ -1,0 +1,44 @@
+{
+  "name": "lean-forms",
+  "version": "1.0.0",
+  "description": "Power-Ups for Contact Form 7 - WordPress Plugin",
+  "main": "index.js",
+  "scripts": {
+    "start": "wp-scripts start",
+    "build": "wp-scripts build",
+    "format": "wp-scripts format",
+    "lint:css": "wp-scripts lint-style",
+    "lint:js": "wp-scripts lint-js",
+    "lint:md:docs": "wp-scripts lint-md-docs",
+    "lint:pkg-json": "wp-scripts lint-pkg-json",
+    "packages-update": "wp-scripts packages-update",
+    "plugin-zip": "wp-scripts plugin-zip",
+    "test:e2e": "wp-scripts test-e2e",
+    "test:unit": "wp-scripts test-unit-js"
+  },
+  "devDependencies": {
+    "@wordpress/api-fetch": "^6.0.0",
+    "@wordpress/components": "^25.0.0",
+    "@wordpress/data": "^9.0.0",
+    "@wordpress/dataviews": "^0.4.0",
+    "@wordpress/element": "^5.0.0",
+    "@wordpress/i18n": "^4.0.0",
+    "@wordpress/scripts": "^27.0.0",
+    "autoprefixer": "^10.4.21",
+    "postcss": "^8.5.6",
+    "sass": "^1.69.0",
+    "tailwindcss": "^3.4.17"
+  },
+  "keywords": [
+    "wordpress",
+    "plugin",
+    "contact-form-7",
+    "forms",
+    "tailwindcss"
+  ],
+  "author": "Your Name",
+  "license": "GPL-2.0-or-later",
+  "dependencies": {
+    "@wordpress/url": "^4.29.0"
+  }
+}

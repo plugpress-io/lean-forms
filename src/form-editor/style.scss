@@ -1,0 +1,116 @@
+
+
+.lean-forms-tag-generator {
+  .description-box {
+    h3 {
+      margin: 0 0 8px 0;
+      font-size: 16px;
+      font-weight: 600;
+    }
+    p {
+      margin: 0 0 16px 0;
+      color: #666;
+      font-size: 13px;
+    }
+  }
+
+  .control-box {
+    margin-bottom: 20px;
+
+    fieldset {
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      padding: 16px;
+      margin-bottom: 16px;
+    }
+
+    legend {
+      font-weight: 600;
+      font-size: 14px;
+      color: #333;
+      padding: 0 8px;
+    }
+  }
+
+  .form-table {
+    th {
+      width: 30%;
+      padding: 8px 0;
+      vertical-align: top;
+      text-align: left;
+    }
+    td {
+      padding: 8px 0;
+      vertical-align: top;
+    }
+    input,
+    select {
+      width: 100%;
+      max-width: 200px;
+    }
+    small {
+      color: #666;
+      font-size: 12px;
+      line-height: 1.4;
+    }
+  }
+
+  .insert-box {
+    background: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 16px;
+
+    .flex-container {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+
+    input[data-tag-part="tag"] {
+      flex: 1;
+      font-family: monospace;
+      font-size: 13px;
+      background: #fff;
+      border: 1px solid #ddd;
+      border-radius: 3px;
+      padding: 8px 12px;
+    }
+
+    button {
+      white-space: nowrap;
+    }
+  }
+
+  .mail-tag-tip {
+    margin: 0;
+    font-size: 12px;
+    color: #666;
+    line-height: 1.4;
+
+    strong[data-tag-part="mail-tag"] {
+      color: #0073aa;
+      font-weight: 600;
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .lean-forms-tag-generator {
+    .insert-box {
+      .flex-container {
+        flex-direction: column;
+        align-items: stretch;
+      }
+    }
+    .form-table {
+      th,
+      td {
+        display: block;
+        width: 100%;
+        padding: 4px 0;
+      }
+    }
+  }
+}

@@ -1,0 +1,20 @@
+// Icon Components
+export { default as GridIcon } from "./grid-icon";
+export { default as EntriesIcon } from "./entries-icon";
+export { default as SpamProtectionIcon } from "./spam-protection-icon";
+export { default as DiviModuleIcon } from "./divi-module-icon";
+export { default as BricksElementIcon } from "./bricks-element-icon";
+export { default as WordpressBlockIcon } from "./wordpress-block-icon";
+export { default as ElementorWidgetIcon } from "./elementor-widget-icon";
+export { default as RatingFieldIcon } from "./rating-field-icon";
+export { default as RangeSliderIcon } from "./range-slider-icon";
+export { default as SignatureIcon } from "./signature-icon";
+export { default as ColorPickerIcon } from "./color-picker-icon";
+export { default as DividerIcon } from "./divider-icon";
+export { default as MultiStepsIcon } from "./multi-steps-icon";
+export { default as ConditionalLogicIcon } from "./conditional-logic-icon";
+export { default as MailchimpIcon } from "./mailchimp-icon";
+export { default as GoogleSheetsIcon } from "./google-sheets-icon";
+export { default as EmailOctopusIcon } from "./emailoctopus-icon";
+export { default as AirtableIcon } from "./airtable-icon";
+export { default as DefaultIcon } from "./default-icon";

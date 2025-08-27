@@ -1,0 +1,9 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body.toplevel_page_lean-forms {
+    #wpcontent {
+        padding-left: 0px ;
+    }
+}
