@@ -43,23 +43,31 @@ class Admin
             [$this, 'render_dashboard_page']
         );
 
-        // All other pages are handled by React Router
-        // But we keep them for proper menu highlighting
+
         add_submenu_page(
             'lean-forms',
-            __('Entries', 'lean-forms'),
-            __('Entries', 'lean-forms'),
+            __('Add Form', 'lean-forms'),
+            __('Add Form', 'lean-forms'),
             'manage_options',
-            'lean-forms&path=entries',
+            'lean-forms#/add-form',
             [$this, 'render_dashboard_page']
         );
 
         add_submenu_page(
             'lean-forms',
-            __('Add-ons', 'lean-forms'),
-            __('Add-ons', 'lean-forms'),
+            __('Entries', 'lean-forms'),
+            __('Entries', 'lean-forms'),
             'manage_options',
-            'lean-forms&path=addons',
+            'lean-forms#/entries',
+            [$this, 'render_dashboard_page']
+        );
+
+        add_submenu_page(
+            'lean-forms',
+            __('Features', 'lean-forms'),
+            __('Features', 'lean-forms'),
+            'manage_options',
+            'lean-forms#/features',
             [$this, 'render_dashboard_page']
         );
     }

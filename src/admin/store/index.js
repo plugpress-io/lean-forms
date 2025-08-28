@@ -4,6 +4,7 @@
  */
 
 import { createReduxStore, register } from "@wordpress/data";
+import apiFetch from "@wordpress/api-fetch";
 
 const DEFAULT_STATE = {
   // Current navigation
@@ -80,6 +81,25 @@ const actions = {
       key,
       value,
     };
+  },
+
+  // Async action to fetch settings
+  *fetchSettings() {
+    yield actions.setSettingsLoading(true);
+
+    try {
+      const settings = yield apiFetch({
+        path: "/lean-forms/v1/settings",
+        method: "GET",
+      });
+
+      yield actions.setSettings(settings || {});
+    } catch (error) {
+      console.error("Error fetching settings:", error);
+      yield actions.setSettings({});
+    } finally {
+      yield actions.setSettingsLoading(false);
+    }
   },
 
   // Entries

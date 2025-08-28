@@ -1,0 +1,39 @@
+{
+  "name": "@lean-forms/ui-components",
+  "version": "1.0.0",
+  "description": "Reusable ShadCN-based UI components for WordPress admin interfaces",
+  "main": "index.js",
+  "type": "module",
+  "exports": {
+    ".": "./index.js",
+    "./ui/*": "./ui/*.jsx",
+    "./data-table": "./data-table.jsx",
+    "./lib/utils": "./lib/utils.js"
+  },
+  "keywords": [
+    "react",
+    "components",
+    "ui",
+    "shadcn",
+    "tailwindcss",
+    "wordpress"
+  ],
+  "author": "Lean Forms",
+  "license": "MIT",
+  "peerDependencies": {
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0",
+    "@tanstack/react-table": "^8.0.0",
+    "lucide-react": "^0.400.0",
+    "clsx": "^2.0.0",
+    "tailwind-merge": "^2.0.0",
+    "class-variance-authority": "^0.7.0"
+  },
+  "files": [
+    "ui/",
+    "lib/",
+    "data-table.jsx",
+    "index.js",
+    "README.md"
+  ]
+}

@@ -1,6 +1,6 @@
 /**
- * Add-ons Data
- * Centralized add-on definitions
+ * Features Data
+ * Centralized feature definitions
  */
 
 import { __ } from "@wordpress/i18n";
@@ -29,7 +29,8 @@ import {
 export const LITE_ADDONS = [
   {
     id: "grid",
-    title: __("Grid Layout", "lean-forms"),
+    name: __("Grid Layout", "lean-forms"),
+    type: "Lite",
     description: __(
       "Row/Column shortcodes for organizing CF7 form fields",
       "lean-forms",
@@ -39,7 +40,8 @@ export const LITE_ADDONS = [
   },
   {
     id: "entries",
-    title: __("Form Entries", "lean-forms"),
+    name: __("Form Entries", "lean-forms"),
+    type: "Lite",
     description: __(
       "Store and manage form submissions in WordPress",
       "lean-forms",
@@ -49,42 +51,42 @@ export const LITE_ADDONS = [
   },
   {
     id: "spam_protection",
-    title: __("Spam Protection", "lean-forms"),
+    name: __("Spam Protection", "lean-forms"),
+    type: "Planned",
     description: __("Cloudflare Turnstile integration (Planned)", "lean-forms"),
     option: "lean_forms_enable_spam_protection",
-    planned: true,
     icon: SpamProtectionIcon,
   },
   {
     id: "divi_module",
-    title: __("Divi Visual Builder Module", "lean-forms"),
+    name: __("Divi Visual Builder Module", "lean-forms"),
+    type: "Lite",
     description: __("Native Divi module for form styling", "lean-forms"),
     option: "lean_forms_enable_divi",
-    planned: true,
     icon: DiviModuleIcon,
   },
   {
     id: "bricks_element",
-    title: __("Bricks Visual Site Builder", "lean-forms"),
+    name: __("Bricks Visual Site Builder", "lean-forms"),
+    type: "Lite",
     description: __("Native Bricks form element", "lean-forms"),
     option: "lean_forms_enable_bricks",
-    planned: true,
     icon: BricksElementIcon,
   },
   {
     id: "gutenberg_block",
-    title: __("WordPress Block", "lean-forms"),
+    name: __("WordPress Block", "lean-forms"),
+    type: "Lite",
     description: __("Gutenberg block for form styling", "lean-forms"),
     option: "lean_forms_enable_block",
-    planned: true,
     icon: WordpressBlockIcon,
   },
   {
     id: "elementor_widget",
-    title: __("Elementor Widget", "lean-forms"),
+    name: __("Elementor Widget", "lean-forms"),
+    type: "Lite",
     description: __("Native Elementor widget for forms", "lean-forms"),
     option: "lean_forms_enable_elementor",
-    planned: true,
     icon: ElementorWidgetIcon,
   },
 ];
@@ -93,7 +95,8 @@ export const PRO_ADDONS = [
   // Advanced Fields - Individual toggles
   {
     id: "rating_field",
-    title: __("Rating/Star Field", "lean-forms"),
+    name: __("Rating/Star Field", "lean-forms"),
+    type: "Pro",
     description: __("Add star rating inputs to your forms", "lean-forms"),
     category: "fields",
     option: "lean_forms_enable_rating_field",
@@ -101,7 +104,8 @@ export const PRO_ADDONS = [
   },
   {
     id: "range_slider_field",
-    title: __("Range Slider Field", "lean-forms"),
+    name: __("Range Slider Field", "lean-forms"),
+    type: "Pro",
     description: __("Add range/slider inputs for numeric values", "lean-forms"),
     category: "fields",
     option: "lean_forms_enable_range_slider_field",
@@ -109,7 +113,8 @@ export const PRO_ADDONS = [
   },
   {
     id: "signature_field",
-    title: __("Signature Field", "lean-forms"),
+    name: __("Signature Field", "lean-forms"),
+    type: "Pro",
     description: __("Capture digital signatures", "lean-forms"),
     category: "fields",
     option: "lean_forms_enable_signature_field",
@@ -117,7 +122,8 @@ export const PRO_ADDONS = [
   },
   {
     id: "color_picker_field",
-    title: __("Color Picker Field", "lean-forms"),
+    name: __("Color Picker Field", "lean-forms"),
+    type: "Pro",
     description: __("Add color selection inputs", "lean-forms"),
     category: "fields",
     option: "lean_forms_enable_color_picker_field",
@@ -125,7 +131,8 @@ export const PRO_ADDONS = [
   },
   {
     id: "divider_field",
-    title: __("Divider Field", "lean-forms"),
+    name: __("Divider Field", "lean-forms"),
+    type: "Pro",
     description: __("Add visual dividers and spacers", "lean-forms"),
     category: "fields",
     option: "lean_forms_enable_divider_field",
@@ -134,7 +141,8 @@ export const PRO_ADDONS = [
   // Form Features
   {
     id: "multi_steps",
-    title: __("Multi-Step Forms", "lean-forms"),
+    name: __("Multi-Step Forms", "lean-forms"),
+    type: "Pro",
     description: __("Break long forms into multiple steps", "lean-forms"),
     category: "features",
     option: "lean_forms_enable_multi_steps",
@@ -142,7 +150,8 @@ export const PRO_ADDONS = [
   },
   {
     id: "conditional_logic",
-    title: __("Conditional Fields", "lean-forms"),
+    name: __("Conditional Fields", "lean-forms"),
+    type: "Pro",
     description: __("Show/hide fields based on user input", "lean-forms"),
     category: "features",
     option: "lean_forms_enable_conditional_logic",
@@ -151,7 +160,8 @@ export const PRO_ADDONS = [
   // Integrations
   {
     id: "google_sheets",
-    title: __("Google Sheets Integration", "lean-forms"),
+    name: __("Google Sheets Integration", "lean-forms"),
+    type: "Pro",
     description: __("Sync form submissions to Google Sheets", "lean-forms"),
     category: "integrations",
     option: "lean_forms_enable_google_sheets",
@@ -159,7 +169,8 @@ export const PRO_ADDONS = [
   },
   {
     id: "mailchimp",
-    title: __("Mailchimp Integration", "lean-forms"),
+    name: __("Mailchimp Integration", "lean-forms"),
+    type: "Pro",
     description: __("Add contacts to Mailchimp lists", "lean-forms"),
     category: "integrations",
     option: "lean_forms_enable_mailchimp",
@@ -167,7 +178,8 @@ export const PRO_ADDONS = [
   },
   {
     id: "emailoctopus",
-    title: __("EmailOctopus Integration", "lean-forms"),
+    name: __("EmailOctopus Integration", "lean-forms"),
+    type: "Pro",
     description: __("Add contacts to EmailOctopus lists", "lean-forms"),
     category: "integrations",
     option: "lean_forms_enable_emailoctopus",
@@ -175,7 +187,8 @@ export const PRO_ADDONS = [
   },
   {
     id: "airtable",
-    title: __("Airtable Integration", "lean-forms"),
+    name: __("Airtable Integration", "lean-forms"),
+    type: "Pro",
     description: __("Push submissions to Airtable tables", "lean-forms"),
     category: "integrations",
     option: "lean_forms_enable_airtable",

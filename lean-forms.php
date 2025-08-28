@@ -48,11 +48,6 @@ function lean_forms_init()
     new \Lean_Forms\Admin();
     new \Lean_Forms\REST();
     new \Lean_Forms\Grid();
-
-    // Register block
-    if (function_exists('register_block_type')) {
-        register_block_type(LEAN_FORMS_PLUGIN_DIR . 'build/blocks/forms-styler');
-    }
 }
 add_action('init', 'lean_forms_init');
 

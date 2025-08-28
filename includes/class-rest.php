@@ -96,6 +96,35 @@ class REST
                 'args' => $this->get_settings_args(),
             ],
         ]);
+
+        register_rest_route('lean-forms/v1', '/import-form', [
+            [
+                'methods' => \WP_REST_Server::CREATABLE,
+                'callback' => [$this, 'import_form'],
+                'permission_callback' => [$this, 'check_permissions'],
+                'args' => [
+                    'template_id' => [
+                        'required' => true,
+                        'type' => 'string',
+                        'sanitize_callback' => 'sanitize_text_field',
+                    ],
+                    'form_title' => [
+                        'required' => true,
+                        'type' => 'string',
+                        'sanitize_callback' => 'sanitize_text_field',
+                    ],
+                    'form_content' => [
+                        'required' => true,
+                        'type' => 'string',
+                        'sanitize_callback' => 'wp_kses_post',
+                    ],
+                    'mail_template' => [
+                        'type' => 'object',
+                        'default' => [],
+                    ],
+                ],
+            ],
+        ]);
     }
 
     /**
@@ -464,5 +493,73 @@ class REST
             'updated' => $updated,
             'settings' => $this->get_settings($request)->get_data(),
         ]);
+    }
+
+    /**
+     * Import Contact Form 7 template
+     */
+    public function import_form($request)
+    {
+        // Check if Contact Form 7 is active
+        if (!class_exists('WPCF7_ContactForm')) {
+            return new \WP_Error(
+                'cf7_not_active',
+                __('Contact Form 7 plugin is not active', 'lean-forms'),
+                ['status' => 400]
+            );
+        }
+
+        $template_id = $request->get_param('template_id');
+        $form_title = $request->get_param('form_title');
+        $form_content = $request->get_param('form_content');
+        $mail_template = $request->get_param('mail_template') ?: [];
+
+        try {
+            // Create new Contact Form 7 form
+            $contact_form = \WPCF7_ContactForm::get_template();
+
+            // Set form title
+            $contact_form->set_title($form_title);
+
+            // Set form content
+            $contact_form->set_prop('form', $form_content);
+
+            // Set mail template if provided
+            if (!empty($mail_template)) {
+                $mail = $contact_form->prop('mail');
+
+                if (isset($mail_template['subject'])) {
+                    $mail['subject'] = $mail_template['subject'];
+                }
+
+                if (isset($mail_template['body'])) {
+                    $mail['body'] = $mail_template['body'];
+                }
+
+                $contact_form->set_prop('mail', $mail);
+            }
+
+            // Save the form
+            $form_id = $contact_form->save();
+
+            if (!$form_id) {
+                throw new \Exception(__('Failed to create Contact Form 7 form', 'lean-forms'));
+            }
+
+            // Return success response
+            return rest_ensure_response([
+                'success' => true,
+                'message' => __('Form template imported successfully', 'lean-forms'),
+                'form_id' => $form_id,
+                'template_id' => $template_id,
+                'edit_url' => admin_url("admin.php?page=wpcf7&post={$form_id}&action=edit"),
+            ]);
+        } catch (\Exception $e) {
+            return new \WP_Error(
+                'import_failed',
+                $e->getMessage(),
+                ['status' => 500]
+            );
+        }
     }
 }

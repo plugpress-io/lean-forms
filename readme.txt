@@ -1,5 +1,5 @@
-=== Lean Forms — Power-Ups for Contact Form 7 (Lite) ===
-Contributors: yourname
+=== Lean Forms ===
+Contributors: badhonrocks
 Tags: contact-form-7, forms, form-styling, form-entries, cf7
 Requires at least: 6.0
 Tested up to: 6.4
@@ -17,12 +17,10 @@ Lean Forms is a powerful WordPress plugin that extends Contact Form 7 with essen
 **Key Features:**
 
 * **Form Entry Collection**: Automatically captures all Contact Form 7 submissions
-* **Admin Dashboard**: Beautiful React-based interface using WordPress DataViews
 * **Form Styler Block**: Customize form appearance with visual controls
 * **Grid Layout System**: Responsive 12-column grid shortcodes for CF7 forms
 * **CSV Export**: Export form entries with filtering (up to 500 rows in Lite)
 * **Spam Detection**: Integrates with CF7's spam detection
-* **Responsive Design**: Modern UI built with TailwindCSS
 
 **What It Does:**
 
