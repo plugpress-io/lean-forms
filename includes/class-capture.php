@@ -1,11 +1,5 @@
 <?php
 
-/**
- * Capture Contact Form 7 Submissions
- *
- * @package Lean_Forms
- */
-
 namespace Lean_Forms;
 
 class Capture
@@ -93,14 +87,6 @@ class Capture
         update_post_meta($post_id, '_lf_created', current_time('mysql'));
         update_post_meta($post_id, '_lf_ip', $this->get_client_ip());
         update_post_meta($post_id, '_lf_ua', $this->get_user_agent());
-
-        // Log entry creation
-        error_log(sprintf(
-            'Lean Forms: Captured CF7 submission (Form ID: %d, Entry ID: %d, Status: %s)',
-            $form_id,
-            $post_id,
-            $status
-        ));
     }
 
     /**

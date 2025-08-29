@@ -3,7 +3,7 @@
 /**
  * Plugin Name: Lean Forms
  * Plugin URI: https://plugpress.io/lean-forms
- * Description: Integrates with Contact Form 7 (CF7). Not affiliated or endorsed. Collects form submissions, provides admin interface, and offers form styling blocks.
+ * Description: Lightweight power-ups for Contact Form 7. Do more, no bloat.
  * Version: 1.0.0
  * Author: PlugPress
  * Text Domain: lean-forms
@@ -28,39 +28,90 @@ define('LEAN_FORMS_PLUGIN_FILE', __FILE__);
 define('LEAN_FORMS_PLUGIN_DIR', plugin_dir_path(__FILE__));
 define('LEAN_FORMS_PLUGIN_URL', plugin_dir_url(__FILE__));
 
-// Initialize plugin
+/**
+ * Main Lean Forms Plugin Class
+ */
+class Lean_Forms
+{
+
+    /**
+     * Single instance of the class
+     */
+    private static $_instance = null;
+
+    /**
+     * Get instance
+     */
+    public static function instance()
+    {
+        if (is_null(self::$_instance)) {
+            self::$_instance = new self();
+        }
+        return self::$_instance;
+    }
+
+    /**
+     * Constructor
+     */
+    private function __construct()
+    {
+        $this->init_hooks();
+    }
+
+    /**
+     * Initialize hooks
+     */
+    private function init_hooks()
+    {
+        add_action('init', [$this, 'init']);
+        register_activation_hook(__FILE__, [$this, 'activate']);
+        register_deactivation_hook(__FILE__, [$this, 'deactivate']);
+    }
+
+    /**
+     * Initialize the plugin
+     */
+    public function init()
+    {
+        // Load text domain
+        load_plugin_textdomain('lean-forms', false, dirname(plugin_basename(__FILE__)) . '/languages');
+
+        // Include required files
+        require_once LEAN_FORMS_PLUGIN_DIR . 'includes/class-admin.php';
+        require_once LEAN_FORMS_PLUGIN_DIR . 'includes/class-rest.php';
+        require_once LEAN_FORMS_PLUGIN_DIR . 'includes/class-utils.php';
+        require_once LEAN_FORMS_PLUGIN_DIR . 'includes/class-cf7-metabox.php';
+        require_once LEAN_FORMS_PLUGIN_DIR . 'includes/class-modules.php';
+
+        // Initialize components
+        new \Lean_Forms\Admin();
+        new \Lean_Forms\REST();
+        new \Lean_Forms\Modules();
+    }
+
+    /**
+     * Plugin activation
+     */
+    public function activate()
+    {
+        add_option('lean_forms_version', LEAN_FORMS_VERSION);
+        // Flush rewrite rules for CPT
+        flush_rewrite_rules();
+    }
+
+    /**
+     * Plugin deactivation
+     */
+    public function deactivate()
+    {
+        // Flush rewrite rules
+        flush_rewrite_rules();
+    }
+}
+
+// Kick start the plugin with a function
 function lean_forms_init()
 {
-    // Load text domain
-    load_plugin_textdomain('lean-forms', false, dirname(plugin_basename(__FILE__)) . '/languages');
-
-    // Include required files
-    require_once LEAN_FORMS_PLUGIN_DIR . 'includes/class-cpt.php';
-    require_once LEAN_FORMS_PLUGIN_DIR . 'includes/class-capture.php';
-    require_once LEAN_FORMS_PLUGIN_DIR . 'includes/class-admin.php';
-    require_once LEAN_FORMS_PLUGIN_DIR . 'includes/class-rest.php';
-    require_once LEAN_FORMS_PLUGIN_DIR . 'includes/class-utils.php';
-    require_once LEAN_FORMS_PLUGIN_DIR . 'includes/class-grid.php';
-
-    // Initialize components
-    new \Lean_Forms\CPT();
-    new \Lean_Forms\Capture();
-    new \Lean_Forms\Admin();
-    new \Lean_Forms\REST();
-    new \Lean_Forms\Grid();
+    Lean_Forms::instance();
 }
-add_action('init', 'lean_forms_init');
-
-// Activation hook
-register_activation_hook(__FILE__, function () {
-    // Flush rewrite rules for CPT
-    flush_rewrite_rules();
-});
-
-// Deactivation hook
-register_deactivation_hook(__FILE__, function () {
-    // Flush rewrite rules
-    flush_rewrite_rules();
-});
-
-// Note: Frontend CSS is now conditionally loaded by the Grid class when needed
+lean_forms_init();

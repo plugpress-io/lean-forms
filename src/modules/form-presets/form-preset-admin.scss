@@ -1,0 +1,118 @@
+// Form Preset Admin Styles - Tabbed Interface
+.lean-forms-preset-metabox {
+  .lf-tabs {
+    .lf-tabs-list {
+      @apply flex h-10 items-center justify-center rounded-md bg-gray-100 p-1 text-gray-600;
+      
+      .lf-tab-trigger {
+        @apply inline-flex items-center justify-center whitespace-nowrap rounded-sm px-3 py-1.5 text-sm font-medium transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50;
+        
+        &.active {
+          @apply bg-white text-gray-900 shadow-sm;
+        }
+        
+        &:not(.active) {
+          @apply hover:bg-white hover:text-gray-900;
+        }
+      }
+    }
+    
+    .lf-tab-content {
+      @apply mt-4;
+      
+      &[data-value] {
+        display: none;
+        
+        &[data-value="styling"] {
+          display: block;
+        }
+      }
+    }
+  }
+  
+  // Form controls
+  .lf-form-group {
+    @apply space-y-2;
+    
+    label {
+      @apply text-sm font-medium text-gray-700;
+    }
+    
+    input[type="color"] {
+      @apply h-10 w-full rounded-md border border-gray-300 bg-white px-3 py-2 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500;
+    }
+    
+    input[type="number"] {
+      @apply h-10 w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500;
+    }
+    
+    select {
+      @apply h-10 w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500;
+    }
+  }
+  
+  // Grid layouts
+  .lf-grid {
+    @apply grid gap-3;
+    
+    &.lf-grid-cols-2 {
+      @apply grid-cols-2;
+    }
+  }
+  
+  // Spacing utilities
+  .lf-space-y-4 > * + * {
+    @apply mt-4;
+  }
+  
+  .lf-space-y-6 > * + * {
+    @apply mt-6;
+  }
+  
+  // Preview section
+  .lf-preview {
+    @apply mt-6 rounded-lg bg-gray-50 p-4;
+    
+    h4 {
+      @apply text-sm font-medium text-gray-700 mb-3;
+    }
+    
+    .lf-preset-name {
+      @apply text-lg font-semibold text-blue-600;
+    }
+    
+    .lf-preset-desc {
+      @apply text-sm text-gray-600;
+    }
+  }
+  
+  // Coming soon section
+  .lf-coming-soon {
+    @apply p-8 text-center text-gray-500;
+    
+    .lf-icon {
+      @apply text-4xl mb-4;
+    }
+    
+    h3 {
+      @apply text-lg font-medium mb-2;
+    }
+  }
+  
+  // Feature cards
+  .lf-feature-card {
+    @apply p-4 border rounded-lg bg-gray-50;
+    
+    .lf-feature-icon {
+      @apply text-2xl mb-2;
+    }
+    
+    h5 {
+      @apply font-medium mb-1;
+    }
+    
+    p {
+      @apply text-sm text-gray-600;
+    }
+  }
+}

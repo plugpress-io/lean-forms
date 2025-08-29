@@ -1,11 +1,5 @@
-/**
- * Simple CF7 Tag Generator for Lean Forms
- */
-
-(function ($) {
+import(function ($) {
   "use strict";
-
-  console.log("🚀 Lean Forms CF7 Editor script loaded");
 
   // Custom insertion function for wrapping tags
   function insertWrappingTag(tagType, attributes) {
@@ -49,19 +43,11 @@
     editor.setSelectionRange(newCursorPos, newCursorPos);
 
     $formEditor.trigger("change").focus();
-    console.log(
-      "✅ Successfully inserted:",
-      openTag + (selectedText || "") + closeTag,
-    );
   }
 
   $(document).ready(function () {
-    console.log("Setting up CF7 tag generators");
-
     // Update tag preview when options change
     function updateTagPreview() {
-      console.log("Updating tag previews...");
-
       // Update any visible tag inputs
       $('input.tag.code[name="lfcf7-row"]').each(function () {
         const $tagInput = $(this);
@@ -180,7 +166,6 @@
       const originalInsertAtCursor = window.insertAtCursor;
       window.insertAtCursor = function (element, value) {
         if (ourInsertInProgress) {
-          console.log("🚫 Blocking CF7's insertAtCursor during our insertion");
           return;
         }
         return originalInsertAtCursor.call(this, element, value);
@@ -189,8 +174,6 @@
 
     // Handle our custom insertion with complete override
     $(document).on("click", ".insert-tag", function (e) {
-      console.log("🔥 Insert button clicked!");
-
       const $button = $(this);
       const $dialog = $button.closest(
         ".ui-dialog-content, .tag-generator-panel, .postbox",
@@ -198,17 +181,13 @@
       const $tagInput = $dialog.find("input.tag.code");
 
       if (!$tagInput.length) {
-        console.log("No tag input found");
         return;
       }
 
       const tagName = $tagInput.attr("name");
-      console.log("Tag name:", tagName);
 
       // Only handle our grid tags
       if (tagName === "lfcf7-row" || tagName === "lfcf7-col") {
-        console.log("🎯 Handling GRID tag:", tagName);
-
         // Set flag to block CF7
         ourInsertInProgress = true;
 
@@ -224,7 +203,6 @@
           if (gap !== "16") attributes.gap = gap;
           if (className) attributes.class = className;
 
-          console.log("📝 Inserting row with:", attributes);
           insertWrappingTag("lfcf7-row", attributes);
         } else if (tagName === "lfcf7-col") {
           const col = $dialog.find('select[name="col"]').val() || "12";
@@ -242,7 +220,6 @@
           if (xl) attributes.xl = xl;
           if (className) attributes.class = className;
 
-          console.log("📝 Inserting column with:", attributes);
           insertWrappingTag("lfcf7-col", attributes);
         }
 
@@ -268,14 +245,10 @@
         if (!ourInsertInProgress && currentContent !== lastContent) {
           const diff = currentContent.replace(lastContent, "");
           if (diff.includes("[lfcf7-") && !diff.includes("[/lfcf7-")) {
-            console.log("🚨 Detected unwanted CF7 insertion:", diff);
-            // Could potentially clean this up here
           }
         }
         lastContent = currentContent;
       });
     }
   });
-
-  console.log("✅ Lean Forms CF7 editor support loaded");
 })(jQuery);

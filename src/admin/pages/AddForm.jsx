@@ -37,7 +37,7 @@ const AddForm = ({ navigate }) => {
     setImporting(prev => ({ ...prev, [template.id]: true }));
     
     try {
-      console.log('Importing template:', template.name);
+
       
       const response = await apiFetch({
         path: '/lean-forms/v1/import-form',
@@ -50,7 +50,7 @@ const AddForm = ({ navigate }) => {
         },
       });
 
-      console.log('Import response:', response);
+
 
       if (response.success && response.form_id) {
         showToast.success(

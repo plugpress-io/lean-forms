@@ -21,5 +21,3 @@ export { default as AppLayout } from "./AppLayout.jsx";
 
 // Utilities
 export { cn } from "./lib/utils.js";
-
-// No external dependencies - all components are native React

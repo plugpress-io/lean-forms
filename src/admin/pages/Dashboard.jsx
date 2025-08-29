@@ -29,36 +29,36 @@ const Dashboard = ({ navigate }) => {
   }));
 
   // Mock stats for now
-  const stats = [
-    {
-      title: __('Total Forms', 'lean-forms'),
-      value: forms?.length || 0,
-      icon: Mail,
-      change: '+12%',
-      changeType: 'positive'
-    },
-    {
-      title: __('Total Entries', 'lean-forms'),
-      value: entries?.length || 0,
-      icon: Users,
-      change: '+8%',
-      changeType: 'positive'
-    },
-    {
-      title: __('Active Features', 'lean-forms'),
-      value: Object.values(settings).filter(Boolean).length || 0,
-      icon: CheckCircle,
-      change: '+2',
-      changeType: 'neutral'
-    },
-    {
-      title: __('Spam Blocked', 'lean-forms'),
-      value: 0,
-      icon: Shield,
-      change: '0%',
-      changeType: 'neutral'
-    }
-  ];
+  // const stats = [
+  //   {
+  //     title: __('Total Forms', 'lean-forms'),
+  //     value: forms?.length || 0,
+  //     icon: Mail,
+  //     change: '+12%',
+  //     changeType: 'positive'
+  //   },
+  //   {
+  //     title: __('Total Entries', 'lean-forms'),
+  //     value: entries?.length || 0,
+  //     icon: Users,
+  //     change: '+8%',
+  //     changeType: 'positive'
+  //   },
+  //   {
+  //     title: __('Active Features', 'lean-forms'),
+  //     value: Object.values(settings).filter(Boolean).length || 0,
+  //     icon: CheckCircle,
+  //     change: '+2',
+  //     changeType: 'neutral'
+  //   },
+  //   {
+  //     title: __('Spam Blocked', 'lean-forms'),
+  //     value: 0,
+  //     icon: Shield,
+  //     change: '0%',
+  //     changeType: 'neutral'
+  //   }
+  // ];
 
   const quickActions = [
     {
@@ -89,7 +89,7 @@ const Dashboard = ({ navigate }) => {
         </p>
       </div>
 
-      {/* Stats Grid */}
+      {/*
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         {stats.map((stat) => {
           const Icon = stat.icon;
@@ -123,7 +123,7 @@ const Dashboard = ({ navigate }) => {
             </div>
           );
         })}
-      </div>
+      </div>*/}
 
       {/* Quick Actions */}
       <div className="bg-white rounded-lg border p-6">

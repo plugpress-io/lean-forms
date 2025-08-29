@@ -8,7 +8,7 @@ Stable tag: 1.0.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
-Integrates with Contact Form 7 (CF7). Not affiliated or endorsed. Collects form submissions, provides admin interface, and offers form styling blocks.
+Contact Form 7 add-on for WordPress—lightweight power-ups to customize, validate, and enhance forms fast, with zero bloat.
 
 == Description ==
 
@@ -31,11 +31,6 @@ Lean Forms is a powerful WordPress plugin that extends Contact Form 7 with essen
 5. **Data Export**: Export filtered data to CSV for analysis
 6. **Security**: Automatically strips sensitive information (passwords, credit cards, etc.)
 
-**Perfect For:**
-* Agencies managing multiple client forms
-* Businesses needing form submission analytics
-* Developers wanting to extend CF7 functionality
-* Anyone needing better form management tools
 
 == Installation ==
 

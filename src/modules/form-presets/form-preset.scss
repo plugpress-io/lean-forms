@@ -1,0 +1,85 @@
+// Form Preset Styles
+// Import all preset styles
+@import 'presets/classic';
+@import 'presets/modern';
+
+// Base form styles
+.lean-forms-preset-base {
+  .wpcf7-form {
+    margin: 0;
+    padding: 0;
+    
+    // Reset CF7 default styles
+    p {
+      margin: 0 0 1rem 0;
+    }
+    
+    .wpcf7-form-control-wrap {
+      margin-bottom: 1rem;
+    }
+    
+    // Common input styles
+    input, select, textarea {
+      width: 100%;
+      box-sizing: border-box;
+      transition: all 0.3s ease;
+      
+      &:focus {
+        outline: none;
+      }
+    }
+    
+    // Common label styles
+    label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 500;
+    }
+    
+    // Common button styles
+    input[type="submit"] {
+      cursor: pointer;
+      border: none;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      
+      &:hover {
+        transform: translateY(-1px);
+      }
+      
+      &:active {
+        transform: translateY(0);
+      }
+    }
+    
+    // Placeholder styles
+    ::placeholder {
+      opacity: 1;
+    }
+    
+    // Error styles
+    .wpcf7-not-valid-tip {
+      color: #dc2626;
+      font-size: 0.875rem;
+      margin-top: 0.25rem;
+    }
+    
+    .wpcf7-response-output {
+      margin: 1rem 0 0 0;
+      padding: 1rem;
+      border-radius: 6px;
+      
+      &.wpcf7-mail-sent-ok {
+        background-color: #d1fae5;
+        color: #065f46;
+        border: 1px solid #a7f3d0;
+      }
+      
+      &.wpcf7-validation-errors {
+        background-color: #fef2f2;
+        color: #991b1b;
+        border: 1px solid #fecaca;
+      }
+    }
+  }
+}

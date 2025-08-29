@@ -6,7 +6,7 @@
 import React from 'react';
 import { useSelect, useDispatch } from '@wordpress/data';
 import { __ } from '@wordpress/i18n';
-import { Home, List, Settings, HelpCircle, ExternalLink, Plus } from 'lucide-react';
+import { Home, List, Settings, HelpCircle, ExternalLink, Plus, Shield } from 'lucide-react';
 
 // UI Components
 import { Button } from './ui/button';
@@ -27,20 +27,20 @@ const AppLayout = ({ children, currentPath, navigate }) => {
       icon: Home,
     },
     {
-      name: 'add-form',
-      title: __('Add Form', 'lean-forms'),
-      icon: Plus,
-    },
-    {
-      name: 'entries',
-      title: __('Entries', 'lean-forms'),
-      icon: List,
-    },
-    {
       name: 'features',
       title: __('Features', 'lean-forms'),
       icon: Settings,
     },
+    // {
+    //   name: 'add-form',
+    //   title: __('Add Form', 'lean-forms'),
+    //   icon: Plus,
+    // },
+    {
+      name: 'entries',
+      title: __('Entries', 'lean-forms'),
+      icon: List,
+    }
   ];
 
   const dismissNotice = (id) => {
@@ -48,7 +48,6 @@ const AppLayout = ({ children, currentPath, navigate }) => {
   };
 
   const handleNavigation = (path) => {
-    console.log('🚀 AppLayout navigating to:', path);
     navigate(path);
   };
 
@@ -57,46 +56,43 @@ const AppLayout = ({ children, currentPath, navigate }) => {
       {/* Header */}
       <header className="bg-white border-b border-gray-200 sticky top-0 z-40">
         <div className="px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
-            {/* Logo */}
+          <div className="flex justify-between items-center">
             <div className="flex items-center">
-              <div className="flex-shrink-0">
+              <div className="flex flex-col items-start mr-12">
                 <h1 className="text-xl font-bold text-gray-900">
                   {__('Lean Forms', 'lean-forms')}
                 </h1>
+                <span className="text-[11px] text-gray-500">
+                  {__('Powerups for CF7', 'lean-forms')}
+                </span>
               </div>
+              <nav className="hidden md:flex space-x-8 h-16">
+                {navigationItems.map((item) => {
+                  const isActive = currentPath === item.name;
+                  
+                  return (
+                    <button
+                      key={item.name}
+                      onClick={() => handleNavigation(item.name)}
+                      className={cn(
+                        "inline-flex items-center px-1 pt-1 text-sm font-medium border-b-2 transition-colors",
+                        isActive
+                          ? "border-primary text-primary"
+                          : "border-transparent text-gray-700 hover:text-gray-900 hover:border-gray-700"
+                      )}
+                    >
+                      {item.title}
+                    </button>
+                  );
+                })}
+              </nav>
             </div>
 
-            {/* Navigation */}
-            <nav className="hidden md:flex space-x-8">
-              {navigationItems.map((item) => {
-                const Icon = item.icon;
-                const isActive = currentPath === item.name;
-                
-                return (
-                  <button
-                    key={item.name}
-                    onClick={() => handleNavigation(item.name)}
-                    className={cn(
-                      "inline-flex items-center px-1 pt-1 text-sm font-medium border-b-2 transition-colors",
-                      isActive
-                        ? "border-primary text-primary"
-                        : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
-                    )}
-                  >
-                    <Icon className="h-4 w-4 mr-2" />
-                    {item.title}
-                  </button>
-                );
-              })}
-            </nav>
-
-            {/* Help & Docs */}
             <div className="flex items-center space-x-4">
               <Button
                 variant="ghost"
                 size="sm"
-                onClick={() => window.open('https://plugpress.io/lean-forms/docs', '_blank')}
+                onClick={() => window.open('https://plugpress.io/docs/lean-forms', '_blank')}
               >
                 <HelpCircle className="h-4 w-4 mr-2" />
                 {__('Help', 'lean-forms')}

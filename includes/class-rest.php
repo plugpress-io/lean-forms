@@ -125,6 +125,34 @@ class REST
                 ],
             ],
         ]);
+
+        // Integration settings endpoints
+        register_rest_route('lean-forms/v1', '/integration-settings/(?P<integration>[a-zA-Z0-9_-]+)', [
+            [
+                'methods' => \WP_REST_Server::READABLE,
+                'callback' => [$this, 'get_integration_settings'],
+                'permission_callback' => [$this, 'check_permissions'],
+                'args' => [
+                    'integration' => [
+                        'validate_callback' => function ($param) {
+                            return is_string($param) && preg_match('/^[a-zA-Z0-9_-]+$/', $param);
+                        }
+                    ],
+                ],
+            ],
+            [
+                'methods' => \WP_REST_Server::EDITABLE,
+                'callback' => [$this, 'update_integration_settings'],
+                'permission_callback' => [$this, 'check_permissions'],
+                'args' => [
+                    'integration' => [
+                        'validate_callback' => function ($param) {
+                            return is_string($param) && preg_match('/^[a-zA-Z0-9_-]+$/', $param);
+                        }
+                    ],
+                ],
+            ],
+        ]);
     }
 
     /**
@@ -425,32 +453,51 @@ class REST
     }
 
     /**
+     * Get default features configuration
+     */
+    private function get_default_features()
+    {
+        return [
+            // Lite addons (enabled by default)
+            'grid' => true,
+            'entries' => true,
+            'form_presets' => true,
+            'spam_protection' => false,
+            'divi' => false,
+            'bricks' => false,
+            'block' => false,
+            'elementor' => false,
+            // Pro addons (disabled by default)
+            'rating_field' => false,
+            'range_slider_field' => false,
+            'signature_field' => false,
+            'color_picker_field' => false,
+            'divider_field' => false,
+            'multi_steps' => false,
+            'conditional_logic' => false,
+            'google_sheets' => false,
+            'mailchimp' => false,
+            'emailoctopus' => false,
+            'airtable' => false,
+        ];
+    }
+
+    /**
      * Get all addon settings
      */
     private function get_all_settings()
     {
-        return [
-            // Lite addons
-            'lean_forms_enable_grid' => true,
-            'lean_forms_enable_entries' => true,
-            'lean_forms_enable_spam_protection' => false,
-            'lean_forms_enable_divi' => false,
-            'lean_forms_enable_bricks' => false,
-            'lean_forms_enable_block' => false,
-            'lean_forms_enable_elementor' => false,
-            // Pro addons
-            'lean_forms_enable_rating_field' => false,
-            'lean_forms_enable_range_slider_field' => false,
-            'lean_forms_enable_signature_field' => false,
-            'lean_forms_enable_color_picker_field' => false,
-            'lean_forms_enable_divider_field' => false,
-            'lean_forms_enable_multi_steps' => false,
-            'lean_forms_enable_conditional_logic' => false,
-            'lean_forms_enable_google_sheets' => false,
-            'lean_forms_enable_mailchimp' => false,
-            'lean_forms_enable_emailoctopus' => false,
-            'lean_forms_enable_airtable' => false,
-        ];
+        // Get the unified features option with defaults
+        $enabled_features = get_option('lean_forms_enabled_features', $this->get_default_features());
+
+        // Convert to frontend format
+        $settings = [];
+        foreach ($enabled_features as $feature_key => $value) {
+            $option_name = 'lean_forms_enable_' . $feature_key;
+            $settings[$option_name] = $value;
+        }
+
+        return $settings;
     }
 
     /**
@@ -458,12 +505,9 @@ class REST
      */
     public function get_settings($request)
     {
-        $default_settings = $this->get_all_settings();
-        $settings = [];
-
-        foreach ($default_settings as $setting => $default) {
-            $settings[$setting] = get_option($setting, $default);
-        }
+        // Simply return the processed settings from get_all_settings
+        // which already converts the unified option to individual format
+        $settings = $this->get_all_settings();
 
         return rest_ensure_response($settings);
     }
@@ -475,15 +519,31 @@ class REST
     {
         $valid_settings = array_keys($this->get_all_settings());
         $updated = [];
+        $features_updated = false;
+
+        // Get current unified features option with proper defaults
+        $enabled_features = get_option('lean_forms_enabled_features', $this->get_default_features());
 
         foreach ($valid_settings as $setting) {
             if ($request->has_param($setting)) {
                 $value = $request->get_param($setting);
-                $result = update_option($setting, $value);
-                if ($result !== false) {
+
+                // Extract feature key from setting name (e.g., 'lean_forms_enable_multi_steps' -> 'multi_steps')
+                if (strpos($setting, 'lean_forms_enable_') === 0) {
+                    $feature_key = str_replace('lean_forms_enable_', '', $setting);
+
+                    // Update unified option
+                    $enabled_features[$feature_key] = (bool) $value;
+                    $features_updated = true;
+
                     $updated[$setting] = $value;
                 }
             }
+        }
+
+        // Save unified option if any features were updated
+        if ($features_updated) {
+            update_option('lean_forms_enabled_features', $enabled_features);
         }
 
         // Return success response with updated settings
@@ -558,6 +618,80 @@ class REST
             return new \WP_Error(
                 'import_failed',
                 $e->getMessage(),
+                ['status' => 500]
+            );
+        }
+    }
+
+    /**
+     * Get integration settings
+     */
+    public function get_integration_settings($request)
+    {
+        $integration = $request->get_param('integration');
+
+        if (!$integration) {
+            return new \WP_Error(
+                'invalid_integration',
+                __('Invalid integration specified', 'lean-forms'),
+                ['status' => 400]
+            );
+        }
+
+        $option_name = "lean_forms_integration_{$integration}";
+        $settings = get_option($option_name, []);
+
+        return rest_ensure_response([
+            'success' => true,
+            'data' => $settings,
+        ]);
+    }
+
+    /**
+     * Update integration settings
+     */
+    public function update_integration_settings($request)
+    {
+        $integration = $request->get_param('integration');
+
+        if (!$integration) {
+            return new \WP_Error(
+                'invalid_integration',
+                __('Invalid integration specified', 'lean-forms'),
+                ['status' => 400]
+            );
+        }
+
+        // Get request body
+        $body = $request->get_json_params();
+        if (!$body) {
+            $body = $request->get_body_params();
+        }
+
+        // Sanitize settings
+        $settings = [];
+        if (is_array($body)) {
+            foreach ($body as $key => $value) {
+                // Only allow specific keys for security
+                if (in_array($key, ['api_key', 'client_id', 'client_secret', 'spreadsheet_id', 'list_id', 'audience_id', 'base_id', 'table_name'])) {
+                    $settings[sanitize_key($key)] = sanitize_text_field($value);
+                }
+            }
+        }
+
+        $option_name = "lean_forms_integration_{$integration}";
+        $updated = update_option($option_name, $settings);
+
+        if ($updated !== false) {
+            return rest_ensure_response([
+                'success' => true,
+                'message' => __('Integration settings updated successfully', 'lean-forms'),
+                'data' => $settings,
+            ]);
+        } else {
+            return new \WP_Error(
+                'update_failed',
+                __('Failed to update integration settings', 'lean-forms'),
                 ['status' => 500]
             );
         }

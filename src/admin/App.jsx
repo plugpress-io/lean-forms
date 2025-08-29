@@ -15,6 +15,8 @@ import Dashboard from './pages/Dashboard';
 import AddForm from './pages/AddForm';
 import Entries from './pages/Entries';
 import Features from './pages/Features';
+import License from './pages/License';
+import FeatureSettings from './pages/FeatureSettings';
 
 // UI Components
 import { Toast } from './components/ui/toast';
@@ -36,14 +38,14 @@ const App = () => {
     // Parse current path from URL hash
     const parseHashPath = () => {
       const hash = window.location.hash;
-      let path = hash.replace('#/', '').split('/')[0];
+      let path = hash.replace('#/', '');
       
       // If no path or empty, default to dashboard
       if (!path || path === '') {
         path = 'dashboard';
       }
       
-      console.log('🔍 Hash parsing:', { hash, path });
+
       return path;
     };
 
@@ -58,7 +60,6 @@ const App = () => {
 
     // Listen for hash changes
     const handleHashChange = () => {
-      console.log('🔄 Hash changed:', window.location.hash);
       updatePath();
     };
 
@@ -75,7 +76,6 @@ const App = () => {
   }, [dispatch]);
 
   const navigate = (path) => {
-    console.log('🚀 App navigating to:', path);
     if (path !== currentPath) {
       window.location.hash = `#/${path}`;
     }
@@ -83,24 +83,25 @@ const App = () => {
 
   // Render current page component
   const renderCurrentPage = () => {
-    console.log('🎯 Rendering page for path:', currentPath);
+    // Handle settings routes (e.g., settings/google_sheets)
+    if (currentPath.startsWith('settings/')) {
+      const featureId = currentPath.replace('settings/', '');
+      return <FeatureSettings featureId={featureId} navigate={navigate} />;
+    }
     
     switch (currentPath) {
       case 'add-form':
-        console.log('➕ Rendering AddForm');
         return <AddForm navigate={navigate} />;
       case 'entries':
-        console.log('📋 Rendering Entries');
         return <Entries navigate={navigate} />;
       case 'addons':
       case 'features':
-        console.log('🔧 Rendering Features');
         return <Features navigate={navigate} />;
+      case 'license':
+        return <License navigate={navigate} />;
       case 'dashboard':
-        console.log('🏠 Rendering Dashboard');
         return <Dashboard navigate={navigate} />;
       default:
-        console.log('❓ Unknown path, rendering Dashboard');
         return <Dashboard navigate={navigate} />;
     }
   };

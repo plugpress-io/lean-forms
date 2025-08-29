@@ -43,15 +43,14 @@ class Admin
             [$this, 'render_dashboard_page']
         );
 
-
-        add_submenu_page(
-            'lean-forms',
-            __('Add Form', 'lean-forms'),
-            __('Add Form', 'lean-forms'),
-            'manage_options',
-            'lean-forms#/add-form',
-            [$this, 'render_dashboard_page']
-        );
+        // add_submenu_page(
+        //     'lean-forms',
+        //     __('Add Form', 'lean-forms'),
+        //     __('Add Form', 'lean-forms'),
+        //     'manage_options',
+        //     'lean-forms#/add-form',
+        //     [$this, 'render_dashboard_page']
+        // );
 
         add_submenu_page(
             'lean-forms',
@@ -68,6 +67,15 @@ class Admin
             __('Features', 'lean-forms'),
             'manage_options',
             'lean-forms#/features',
+            [$this, 'render_dashboard_page']
+        );
+
+        add_submenu_page(
+            'lean-forms',
+            __('License', 'lean-forms'),
+            __('License', 'lean-forms'),
+            'manage_options',
+            'lean-forms#/license',
             [$this, 'render_dashboard_page']
         );
     }
@@ -120,6 +128,11 @@ class Admin
                 'exportSuccess' => __('Export completed successfully.', 'lean-forms'),
             ],
             'forms' => $this->get_available_forms(),
+            'get_features' => $this->get_features(),
+            'proPlugin' => [
+                'installed' => $this->is_pro_plugin_active(),
+                'version' => $this->get_pro_plugin_version(),
+            ],
         ]);
     }
 
@@ -143,5 +156,41 @@ class Admin
         }
 
         return $form_list;
+    }
+
+    private function get_features()
+    {
+        $features = get_option('lean_forms_features');
+        if (!$features) {
+            return [];
+        }
+
+        return $features;
+    }
+
+    /**
+     * Check if Pro plugin is active
+     */
+    private function is_pro_plugin_active()
+    {
+        // Check if Pro plugin class exists or if plugin is active
+        $class_exists = class_exists('Lean_Forms_Pro');
+        $plugin_active = is_plugin_active('lean-forms-pro/lean-forms-pro.php');
+
+
+
+        return $class_exists || $plugin_active;
+    }
+
+    /**
+     * Get Pro plugin version if available
+     */
+    private function get_pro_plugin_version()
+    {
+        if (defined('LEAN_FORMS_PRO_VERSION')) {
+            return LEAN_FORMS_PRO_VERSION;
+        }
+
+        return null;
     }
 }

@@ -1,0 +1,172 @@
+.lf-row {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: var(--lf-gap, 1rem);
+  
+  // Handle CF7 auto-formatting
+  > br {
+    display: none; // Hide <br> tags inside rows
+  }
+  
+  // Reset margins for CF7 elements
+  .wpcf7-form p {
+    margin: 0;
+  }
+  
+  // Ensure proper grid alignment
+  > * {
+    margin: 0;
+  }
+}
+
+.lf-col {
+  grid-column: span 12 / span 12;
+  
+  // Handle CF7 auto-formatting
+  > br {
+    display: none; // Hide <br> tags inside columns
+  }
+  
+  // Reset margins for CF7 elements
+  .wpcf7-form-control-wrap {
+    margin: 0;
+  }
+  
+  // Style labels
+  label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+  }
+  
+  // Style inputs
+  input, select, textarea {
+    width: 100%;
+    margin: 0;
+  }
+}
+
+// Mixin for column span
+@mixin col-span($attr) {
+  @for $i from 1 through 12 {
+    &[data-#{$attr}="#{$i}"] {
+      grid-column: span #{$i} / span #{$i};
+    }
+  }
+}
+
+// Base column spans
+.lf-col {
+  @include col-span('col');
+}
+
+// Small breakpoint (≥640px)
+@media (min-width: 640px) {
+  .lf-col {
+    @include col-span('sm');
+  }
+}
+
+// Medium breakpoint (≥768px)
+@media (min-width: 768px) {
+  .lf-col {
+    @include col-span('md');
+  }
+}
+
+// Large breakpoint (≥1024px)
+@media (min-width: 1024px) {
+  .lf-col {
+    @include col-span('lg');
+  }
+}
+
+// Extra Large breakpoint (≥1280px)
+@media (min-width: 1280px) {
+  .lf-col {
+    @include col-span('xl');
+  }
+}
+
+// Additional fixes for CF7 compatibility
+.lf-row {
+  // Ensure proper grid behavior
+  align-items: start;
+  
+  // Handle any remaining <br> tags
+  br {
+    display: none !important;
+  }
+}
+
+.lf-col {
+  // Ensure proper column behavior
+  min-height: 0;
+  
+  // Handle any remaining <br> tags
+  br {
+    display: none !important;
+  }
+  
+  // Better spacing for form elements
+  .wpcf7-form-control-wrap {
+    display: block;
+    margin-bottom: 1rem;
+  }
+  
+  // Consistent input heights
+  input[type="text"],
+  input[type="email"],
+  input[type="tel"],
+  input[type="url"],
+  input[type="password"],
+  select,
+  textarea {
+    box-sizing: border-box;
+    padding: 0.5rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 1rem;
+    line-height: 1.5;
+  }
+  
+  // Submit button styling
+  input[type="submit"] {
+    background-color: #0073aa;
+    color: white;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: 500;
+    
+    &:hover {
+      background-color: #005a87;
+    }
+  }
+  
+  // Acceptance field styling - checkbox + text inline
+  .wpcf7-form-control-wrap[data-name="privacy"] {
+    display: inline-block;
+    margin-right: 0.5rem;
+    
+    .wpcf7-acceptance {
+      margin: 0;
+      
+      .wpcf7-list-item {
+        margin: 0;
+        
+        input[type="checkbox"] {
+          margin: 0;
+          margin-right: 0.5rem;
+        }
+      }
+    }
+  }
+  
+  // Make the text after acceptance field inline
+  .wpcf7-form-control-wrap[data-name="privacy"] + * {
+    display: inline;
+  }
+}

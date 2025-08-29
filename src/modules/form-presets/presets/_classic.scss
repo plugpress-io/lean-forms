@@ -1,0 +1,126 @@
+// Classic Preset - Traditional, professional look
+.lean-forms-preset-classic {
+  @extend .lean-forms-preset-base;
+  
+  .wpcf7-form {
+    background: var(--lf-primary-bg-color, #ffffff);
+    padding: 2rem;
+    border: 1px solid #e5e7eb;
+    border-radius: 6px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    
+    // Typography
+    h1 { font-size: var(--lf-h1-font-size, 24px); }
+    h2 { font-size: var(--lf-h2-font-size, 20px); }
+    h3 { font-size: var(--lf-h3-font-size, 18px); }
+    p { font-size: var(--lf-p-font-size, 16px); }
+    
+    // Labels
+    label {
+      font-size: var(--lf-label-font-size, 14px);
+      color: var(--lf-primary-color, #0073aa);
+      font-weight: 600;
+      margin-bottom: 0.75rem;
+    }
+    
+    // Inputs
+    input[type="text"],
+    input[type="email"],
+    input[type="tel"],
+    input[type="url"],
+    input[type="password"],
+    select,
+    textarea {
+      background: var(--lf-input-bg-color, #ffffff);
+      border: 2px solid #e5e7eb;
+      border-radius: 4px;
+      padding: 0.75rem;
+      font-size: var(--lf-p-font-size, 16px);
+      color: #374151;
+      
+      &:focus {
+        border-color: var(--lf-primary-color, #0073aa);
+        box-shadow: 0 0 0 3px rgba(0, 115, 170, 0.1);
+      }
+      
+      &::placeholder {
+        color: var(--lf-placeholder-color, #666666);
+      }
+    }
+    
+    // Textarea specific
+    textarea {
+      min-height: 120px;
+      resize: vertical;
+    }
+    
+    // Select specific
+    select {
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e");
+      background-position: right 0.5rem center;
+      background-repeat: no-repeat;
+      background-size: 1.5em 1.5em;
+      padding-right: 2.5rem;
+    }
+    
+    // Submit button
+    input[type="submit"] {
+      background: var(--lf-button-bg-color, #0073aa);
+      color: var(--lf-button-color, #ffffff);
+      padding: 1rem 2rem;
+      border-radius: 4px;
+      font-size: 1rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.025em;
+      
+      &:hover {
+        background: darken(#0073aa, 10%);
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      }
+      
+      &:active {
+        transform: translateY(0);
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      }
+    }
+    
+    // Checkbox and radio
+    input[type="checkbox"],
+    input[type="radio"] {
+      width: auto;
+      margin-right: 0.5rem;
+    }
+    
+    // Acceptance field
+    .wpcf7-acceptance {
+      .wpcf7-list-item {
+        display: flex;
+        align-items: flex-start;
+        margin: 0;
+        
+        input[type="checkbox"] {
+          margin: 0;
+          margin-right: 0.75rem;
+          margin-top: 0.125rem;
+        }
+        
+        label {
+          margin: 0;
+          font-weight: normal;
+          line-height: 1.5;
+        }
+      }
+    }
+    
+    // Grid compatibility
+    .lf-row {
+      margin-bottom: 1.5rem;
+    }
+    
+    .lf-col {
+      padding: 0 0.75rem;
+    }
+  }
+}

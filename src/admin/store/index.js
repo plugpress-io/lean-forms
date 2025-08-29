@@ -84,21 +84,56 @@ const actions = {
   },
 
   // Async action to fetch settings
-  *fetchSettings() {
-    yield actions.setSettingsLoading(true);
+  fetchSettings() {
+    return async ({ dispatch }) => {
+      dispatch.setSettingsLoading(true);
+
+      try {
+        const response = await apiFetch({
+          path: "/lean-forms/v1/settings",
+          method: "GET",
+        });
+
+        // Handle different response formats
+        let settings = {};
+        if (response && typeof response === "object") {
+          // If response has a settings property, use that, otherwise use response directly
+          settings = response.settings || response;
+        }
+
+        dispatch.setSettings(settings);
+        return settings;
+      } catch (error) {
+        console.error("Error fetching settings:", error);
+        dispatch.setSettings({});
+        throw error;
+      } finally {
+        dispatch.setSettingsLoading(false);
+      }
+    };
+  },
+
+  // Async action to save settings
+  *saveSettings(settingsToSave) {
+    yield actions.setSettingsSaving(true);
 
     try {
-      const settings = yield apiFetch({
+      const response = yield apiFetch({
         path: "/lean-forms/v1/settings",
-        method: "GET",
+        method: "POST",
+        data: settingsToSave,
       });
 
-      yield actions.setSettings(settings || {});
+      if (response.settings) {
+        yield actions.setSettings(response.settings);
+      }
+
+      return response;
     } catch (error) {
-      console.error("Error fetching settings:", error);
-      yield actions.setSettings({});
+      console.error("Error saving settings:", error);
+      throw error;
     } finally {
-      yield actions.setSettingsLoading(false);
+      yield actions.setSettingsSaving(false);
     }
   },
 

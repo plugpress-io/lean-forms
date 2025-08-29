@@ -1,6 +1,6 @@
 <?php
 
-namespace Lean_Forms;
+namespace Lean_Forms\Modules;
 
 if (!defined('ABSPATH')) {
     exit;
@@ -10,11 +10,7 @@ class Grid
 {
     public function __construct()
     {
-        // Check if grid feature is enabled (default: enabled)
-        if (!$this->is_grid_enabled()) {
-            return;
-        }
-
+        // Feature is already enabled if this class is loaded by the feature system
         add_filter('wpcf7_form_elements', [$this, 'process_cf7_shortcodes']);
         add_action('wpcf7_admin_init', [$this, 'add_tag_generators']);
         add_action('admin_enqueue_scripts', [$this, 'add_tag_generator_scripts']);
@@ -26,7 +22,9 @@ class Grid
      */
     private function is_grid_enabled()
     {
-        return get_option('lean_forms_enable_grid', true);
+        // Check the unified features option
+        $enabled_features = get_option('lean_forms_enabled_features', []);
+        return isset($enabled_features['grid']) ? $enabled_features['grid'] : true;
     }
 
     public function process_cf7_shortcodes($content)
@@ -43,6 +41,18 @@ class Grid
             [$this, 'col_shortcode_callback'],
             $content
         );
+
+        // Clean up extra formatting around grid elements
+        $content = preg_replace('/(<p>\s*)?(<div class="lf-row"[^>]*>)(\s*<\/p>)?/', '$2', $content);
+        $content = preg_replace('/(<p>\s*)?(<\/div>\s*<!-- \/lf-row -->)(\s*<\/p>)?/', '$2', $content);
+        $content = preg_replace('/(<p>\s*)?(<div class="lf-col"[^>]*>)(\s*<br\s*\/?>)?/', '$2', $content);
+        $content = preg_replace('/(<br\s*\/?>)?(\s*<\/div>\s*<!-- \/lf-col -->)(\s*<\/p>)?/', '$2', $content);
+
+        // Remove <br> tags that are direct children of grid elements
+        $content = preg_replace('/(<div class="lf-row"[^>]*>)\s*<br\s*\/?>\s*/', '$1', $content);
+        $content = preg_replace('/\s*<br\s*\/?>\s*(<\/div>\s*<!-- \/lf-row -->)/', '$1', $content);
+        $content = preg_replace('/(<div class="lf-col"[^>]*>)\s*<br\s*\/?>\s*/', '$1', $content);
+        $content = preg_replace('/\s*<br\s*\/?>\s*(<\/div>\s*<!-- \/lf-col -->)/', '$1', $content);
 
         return $content;
     }
@@ -68,7 +78,7 @@ class Grid
         $processed_content = $this->process_cf7_shortcodes($content);
 
         return sprintf(
-            '<div class="lf-row%s" style="%s">%s</div>',
+            '<div class="lf-row%s" style="%s">%s</div><!-- /lf-row -->',
             $class_attr,
             esc_attr($style),
             $processed_content
@@ -80,10 +90,11 @@ class Grid
         $atts_string = trim($matches[1]);
         $content = $matches[2];
 
-        // Parse attributes from string like " col:8 sm:1 md:2 lg:5 xl:4 class:my-class"
+        // Parse attributes from string like " size=6" or " col:8 sm:1 md:2 lg:5 xl:4 class:my-class"
         $atts = $this->parse_shortcode_atts($atts_string);
         $atts = array_merge([
             'col' => '12',
+            'size' => '12',
             'sm' => '',
             'md' => '',
             'lg' => '',
@@ -91,7 +102,8 @@ class Grid
             'class' => ''
         ], $atts);
 
-        $col = absint($atts['col']);
+        // Use 'size' if provided, otherwise fall back to 'col'
+        $col = absint(!empty($atts['size']) && $atts['size'] !== '12' ? $atts['size'] : $atts['col']);
         $data_attrs = "data-col=\"{$col}\"";
         foreach (['sm', 'md', 'lg', 'xl'] as $size) {
             if (!empty($atts[$size])) {
@@ -106,7 +118,7 @@ class Grid
         $processed_content = $this->process_cf7_shortcodes($content);
 
         return sprintf(
-            '<div class="lf-col%s" %s>%s</div>',
+            '<div class="lf-col%s" %s>%s</div><!-- /lf-col -->',
             $class_attr,
             $data_attrs,
             $processed_content
@@ -138,8 +150,8 @@ class Grid
             return;
         }
         $tag_generator = \WPCF7_TagGenerator::get_instance();
-        $tag_generator->add('lfcf7-row', __('Grid Row', 'lean-forms'), [$this, 'row_tag_generator']);
-        $tag_generator->add('lfcf7-col', __('Grid Column', 'lean-forms'), [$this, 'col_tag_generator']);
+        $tag_generator->add('lfcf7-row', __('row', 'lean-forms'), [$this, 'row_tag_generator']);
+        $tag_generator->add('lfcf7-col', __('column', 'lean-forms'), [$this, 'col_tag_generator']);
     }
 
     public function row_tag_generator($contact_form, $args = '')
@@ -333,56 +345,11 @@ class Grid
 
     public function maybe_enqueue_grid_css()
     {
-        // Only check if CF7 is active
-        if (!function_exists('wpcf7_get_contact_forms')) {
-            return;
-        }
-
-        // Check if any CF7 forms on this page use grid shortcodes
-        if ($this->page_has_grid_shortcodes()) {
-            wp_enqueue_style(
-                'lean-forms-grid',
-                LEAN_FORMS_PLUGIN_URL . 'build/grid.css',
-                [],
-                LEAN_FORMS_VERSION
-            );
-        }
-    }
-
-    private function page_has_grid_shortcodes()
-    {
-        global $post;
-
-        // Check current post content
-        if ($post && has_shortcode($post->post_content, 'contact-form-7')) {
-            // Get all CF7 forms used on this page
-            preg_match_all('/\[contact-form-7[^\]]*id="?(\d+)"?[^\]]*\]/', $post->post_content, $matches);
-
-            if (!empty($matches[1])) {
-                foreach ($matches[1] as $form_id) {
-                    $form = \WPCF7_ContactForm::get_instance($form_id);
-                    if ($form) {
-                        $form_content = $form->prop('form');
-                        if (strpos($form_content, '[lfcf7-row') !== false || strpos($form_content, '[lfcf7-col') !== false) {
-                            return true;
-                        }
-                    }
-                }
-            }
-        }
-
-        // Also check widgets and other areas where CF7 might be used
-        if (is_active_widget(false, false, 'text') || is_active_widget(false, false, 'custom_html')) {
-            // For performance, we could cache this check
-            $forms = wpcf7_get_contact_forms();
-            foreach ($forms as $form) {
-                $form_content = $form->prop('form');
-                if (strpos($form_content, '[lfcf7-row') !== false || strpos($form_content, '[lfcf7-col') !== false) {
-                    return true;
-                }
-            }
-        }
-
-        return false;
+        wp_enqueue_style(
+            'lean-forms-cf7-grid',
+            LEAN_FORMS_PLUGIN_URL . 'build/grid.css',
+            [],
+            LEAN_FORMS_VERSION
+        );
     }
 }

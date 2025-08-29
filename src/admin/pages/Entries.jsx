@@ -34,7 +34,7 @@ const Entries = ({ navigate }) => {
   useEffect(() => {
     const timer = setTimeout(() => {
       if (entries.length === 0 && !isLoading) {
-        console.log('Adding test data for debugging');
+
         setEntries([
           {
             id: 1,
@@ -83,13 +83,13 @@ const Entries = ({ navigate }) => {
       });
 
       const apiPath = `/lean-forms/v1/entries?${params.toString()}`;
-      console.log('Fetching entries from:', apiPath);
+
 
       const response = await apiFetch({
         path: apiPath,
       });
 
-      console.log('Entries API response:', response);
+
 
       setEntries(response.items || []);
     } catch (error) {
@@ -208,7 +208,7 @@ const Entries = ({ navigate }) => {
   ], []);
 
   const viewEntry = (entry) => {
-    console.log('Viewing entry:', entry);
+
     // TODO: Implement modal or detailed view
   };
 
@@ -263,7 +263,7 @@ const Entries = ({ navigate }) => {
         </p>
       </div>
 
-      {/* Filters */}
+      {/*
       <div className="bg-white rounded-lg border p-6">
         <div className="flex items-center gap-4">
           <div className="flex-1 max-w-sm">
@@ -294,6 +294,7 @@ const Entries = ({ navigate }) => {
           </Button>
         </div>
       </div>
+      */}
 
       {/* Data Table */}
       <div className="bg-white rounded-lg border">
